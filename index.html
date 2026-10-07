@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Office Challenge Catalogue</title>
+<meta name="description" content="Every challenge in the office games: where to go, what to do, how long you have, and what counts as done.">
+<meta name="theme-color" content="#f4f6f4" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e1512" media="(prefers-color-scheme: dark)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: a phone-first field guide. Header, at-a-glance list of all 18, sticky filter bar, then one section per category with task cards keyed by their official ID. */
+:root {
+  --bg: #f4f6f4;
+  --surface: #ffffff;
+  --ink: #15211c;
+  --muted: #56645d;
+  --line: #d9e0dc;
+  --accent: #10704a;
+  --on-accent: #ffffff;
+  --hard: #c3362b;
+  --hard-soft: #fbe9e7;
+  --medium: #a8660b;
+  --medium-soft: #fbf0dc;
+  --easy: #23824f;
+  --easy-soft: #e2f3e8;
+  --loc: #1f6f8b;
+  --loc-soft: #e0f0f5;
+  --font-display: "Familjen Grotesk", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  --bar-h: 112px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1512; --surface: #16201b; --ink: #e5ece8; --muted: #9db0a6; --line: #2a3832;
+    --accent: #4fc48d; --on-accent: #0e1512; --hard: #ff7b6e; --hard-soft: #3a1d1a; --medium: #f0b35a; --medium-soft: #3a2c15;
+    --easy: #5fd393; --easy-soft: #16321f; --loc: #62c3e3; --loc-soft: #132e38; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1512; --surface: #16201b; --ink: #e5ece8; --muted: #9db0a6; --line: #2a3832;
+  --accent: #4fc48d; --on-accent: #0e1512; --hard: #ff7b6e; --hard-soft: #3a1d1a; --medium: #f0b35a; --medium-soft: #3a2c15;
+  --easy: #5fd393; --easy-soft: #16321f; --loc: #62c3e3; --loc-soft: #132e38; color-scheme: dark;
+}
+@media (min-width: 700px) { :root { --bar-h: 64px; } }
+
+* { box-sizing: border-box; }
+html { scroll-padding-top: calc(var(--bar-h) + 12px); -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 17px; line-height: 1.55; overflow-wrap: break-word; }
+.wrap { max-width: 1100px; margin: 0 auto; padding-inline: max(16px, env(safe-area-inset-left, 0px)); }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; line-height: 1.15; }
+a { color: var(--accent); }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+button { -webkit-tap-highlight-color: transparent; }
+
+/* header */
+header { padding-block: max(28px, env(safe-area-inset-top, 0px)) 8px; }
+.eyebrow { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+h1 { font-size: clamp(2rem, 8vw, 3.4rem); font-weight: 700; letter-spacing: -.02em; margin-top: 8px; }
+.lede { max-width: 64ch; color: var(--muted); margin: 10px 0 0; }
+.how { margin: 16px 0 0; padding: 0; list-style: none; display: grid; gap: 6px; max-width: 70ch; }
+.how li { display: grid; grid-template-columns: 1.6em minmax(0, 1fr); }
+.how b { font-family: var(--font-mono); color: var(--accent); }
+
+.mix { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 24px; }
+@media (max-width: 860px) { .mix { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.mix a { text-decoration: none; color: inherit; background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--c); border-radius: 8px; padding: 10px 12px; display: grid; gap: 1px; min-width: 0; }
+.mix .lvl { font-family: var(--font-mono); font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--c); font-weight: 700; }
+.mix .nm { font-family: var(--font-display); font-weight: 700; font-size: 1rem; line-height: 1.2; }
+.mix .ct { font-size: .88rem; color: var(--muted); }
+.mix .ct b { font-family: var(--font-mono); color: var(--ink); }
+
+/* at a glance */
+.glance { margin-top: 28px; }
+.glance summary { cursor: pointer; font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; padding: 12px 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 10px; min-height: 48px; }
+.glance summary::-webkit-details-marker { display: none; }
+.glance summary::after { content: "+"; font-family: var(--font-mono); font-size: 1.3rem; color: var(--muted); }
+.glance[open] summary::after { content: "–"; }
+.glance[open] summary { border-radius: 8px 8px 0 0; }
+.glist { list-style: none; margin: 0; padding: 0; background: var(--surface); border: 1px solid var(--line); border-top: 0; border-radius: 0 0 8px 8px; }
+.glist li + li { border-top: 1px solid var(--line); }
+.glist a { display: grid; grid-template-columns: 2.4em minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 10px 14px; text-decoration: none; color: inherit; min-height: 52px; }
+.glist a:hover { background: var(--bg); }
+.glist .gid { font-family: var(--font-mono); font-weight: 700; color: var(--c); }
+.glist .gname { font-weight: 700; display: block; line-height: 1.25; }
+.glist .gplace { font-size: .88rem; color: var(--muted); display: block; line-height: 1.3; }
+
+.pill { font-family: var(--font-mono); font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--c); background: var(--soft); border-radius: 999px; padding: 3px 9px; white-space: nowrap; }
+
+/* toolbar */
+.toolbar { position: sticky; top: 0; z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line); padding-block: 8px; margin-top: 24px; }
+.toolbar .wrap { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; }
+.chips { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; max-width: 100%; padding-block: 2px; }
+.chips::-webkit-scrollbar { display: none; }
+.chip { font: inherit; font-size: .92rem; font-weight: 600; cursor: pointer; border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 999px; padding: 0 14px; min-height: 40px; white-space: nowrap; flex: none; }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.jump { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.jump label { color: var(--muted); font-size: .92rem; }
+.jump input { font-family: var(--font-mono); font-size: 16px; width: 4.6em; min-height: 40px; padding: 0 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--ink); }
+.jump button { font: inherit; font-size: .92rem; font-weight: 700; cursor: pointer; border: 0; border-radius: 6px; min-height: 40px; padding: 0 16px; background: var(--accent); color: var(--on-accent); }
+.jump .msg { color: var(--hard); font-size: .85rem; }
+@media (max-width: 699px) { .toolbar .wrap { flex-direction: column; align-items: stretch; } .jump input { flex: 1; } }
+
+/* sections */
+main { padding-block: 4px 40px; }
+.cat { padding-top: 32px; }
+.cat-head { display: grid; gap: 4px; margin-bottom: 14px; border-left: 5px solid var(--c); padding-left: 14px; }
+.cat-head h2 { font-size: clamp(1.45rem, 5vw, 2rem); }
+.cat-head .lvl { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; color: var(--c); }
+.cat-head p { margin: 0; color: var(--muted); max-width: 70ch; }
+.cat-rules { background: var(--soft); border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; max-width: 80ch; }
+.cat-rules h3 { font-size: .95rem; margin-bottom: 4px; }
+.cat-rules ul { margin: 0; padding-left: 1.2em; display: grid; gap: 3px; font-size: .95rem; }
+
+.cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 820px) { .cards { grid-template-columns: minmax(0, 1fr); } }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px; display: grid; gap: 14px; align-content: start; min-width: 0; transition: box-shadow .3s; }
+.card.flash { box-shadow: 0 0 0 3px var(--c); }
+.card-top { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 14px; align-items: start; }
+.num { font-family: var(--font-mono); font-weight: 700; font-size: 1.45rem; line-height: 1; color: var(--c); background: var(--soft); border-radius: 8px; min-width: 2.3em; padding: 9px 6px; text-align: center; }
+.card h3 { font-size: 1.3rem; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+.card .sum { margin: 4px 0 0; color: var(--muted); font-size: .98rem; }
+
+.meta { margin: 0; display: grid; grid-template-columns: minmax(0, 1fr) auto; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.meta > div { padding: 9px 12px; min-width: 0; }
+.meta > div + div { border-left: 1px solid var(--line); }
+.meta dt { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+.meta dd { margin: 0; font-weight: 700; line-height: 1.3; }
+.meta .where dd { color: var(--ink); }
+.meta .route { display: grid; gap: 2px; }
+.meta .route span { display: block; }
+.meta .route .arrow { font-weight: 400; color: var(--muted); font-size: .85rem; }
+.meta .time dd { font-family: var(--font-mono); font-size: .95rem; white-space: nowrap; }
+@media (max-width: 380px) {
+  .meta { grid-template-columns: minmax(0, 1fr); }
+  .meta > div + div { border-left: 0; border-top: 1px solid var(--line); }
+}
+
+.block h4 { margin: 0 0 4px; font-family: var(--font-mono); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+.block ol, .block ul { margin: 0; padding-left: 1.25em; display: grid; gap: 5px; }
+.done { background: var(--soft); border-radius: 8px; padding: 10px 14px; }
+.done h4 { color: var(--c); }
+.done p { margin: 0; }
+.card-foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; border-top: 1px dashed var(--line); padding-top: 10px; font-size: .85rem; color: var(--muted); }
+.copy { font: inherit; font-size: .88rem; cursor: pointer; background: none; border: 1px solid var(--line); color: var(--ink); border-radius: 6px; padding: 0 12px; min-height: 36px; max-width: 100%; overflow-wrap: anywhere; }
+
+.hard { --c: var(--hard); --soft: var(--hard-soft); }
+.medium { --c: var(--medium); --soft: var(--medium-soft); }
+.easy { --c: var(--easy); --soft: var(--easy-soft); }
+.loc { --c: var(--loc); --soft: var(--loc-soft); }
+
+.general { margin-top: 44px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; }
+.general h2 { font-size: 1.35rem; margin-bottom: 8px; }
+.general ul { margin: 0; padding-left: 1.2em; display: grid; gap: 5px; max-width: 75ch; }
+footer { color: var(--muted); font-size: .85rem; padding-block: 20px max(36px, env(safe-area-inset-bottom, 0px)); }
+footer code { overflow-wrap: anywhere; }
+@media (max-width: 480px) {
+  body { font-size: 16.5px; }
+  .card { padding: 16px 14px; }
+  .cat-rules { padding: 12px 14px; }
+}
+@media (prefers-reduced-motion: reduce) { .card { transition: none; } }
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <div class="eyebrow">Office games · 18 challenges</div>
+  <h1>Office Challenge Catalogue</h1>
+  <p class="lede">You've been given a list of challenge IDs. Look each one up here to see where to go, what to do, how long you have, and what counts as done.</p>
+  <ol class="how">
+    <li><b>1</b><span>Find your challenge by its ID. Use the list below or the "Challenge #" box.</span></li>
+    <li><b>2</b><span>Go to the place shown on the card and read the steps before you start.</span></li>
+    <li><b>3</b><span>The invigilator there starts the clock and checks that you've finished.</span></li>
+  </ol>
+
+  <nav class="mix" aria-label="Challenge mix per participant">
+    <a class="hard" href="#hard"><span class="lvl">Hard</span><span class="nm">Brain Games</span><span class="ct"><b>1–2</b> per person</span></a>
+    <a class="medium" href="#medium"><span class="lvl">Medium</span><span class="nm">Memory, Observation &amp; Logic</span><span class="ct"><b>1–2</b> per person</span></a>
+    <a class="easy" href="#quick"><span class="lvl">Low</span><span class="nm">Quick Challenges</span><span class="ct"><b>2–3</b> per person</span></a>
+    <a class="loc" href="#location"><span class="lvl">Low</span><span class="nm">Selfie Scavenger Hunt</span><span class="ct"><b>2–3</b> per person</span></a>
+  </nav>
+
+  <details class="glance" id="glance">
+    <summary>All 18 challenges at a glance</summary>
+    <ul class="glist" id="glist"></ul>
+  </details>
+</header>
+
+<div class="toolbar">
+  <div class="wrap">
+    <div class="chips" role="group" aria-label="Show category">
+      <button class="chip" type="button" data-f="all" aria-pressed="true">All</button>
+      <button class="chip" type="button" data-f="hard" aria-pressed="false">Hard</button>
+      <button class="chip" type="button" data-f="medium" aria-pressed="false">Medium</button>
+      <button class="chip" type="button" data-f="quick" aria-pressed="false">Quick</button>
+      <button class="chip" type="button" data-f="location" aria-pressed="false">Selfies</button>
+    </div>
+    <form class="jump" id="jump">
+      <label for="jumpNum">Challenge #</label>
+      <input id="jumpNum" type="number" min="1" max="18" inputmode="numeric" pattern="[0-9]*" placeholder="1–18" autocomplete="off">
+      <button type="submit">Go</button>
+      <span class="msg" id="jumpMsg" role="status"></span>
+    </form>
+  </div>
+</div>
+
+<main class="wrap" id="catalogue"></main>
+
+<div class="wrap">
+  <section class="general" aria-labelledby="gen-h">
+    <h2 id="gen-h">Rules for every challenge</h2>
+    <ul>
+      <li>The invigilator at each place starts and stops the clock. The time on each card is how long you have.</li>
+      <li>Safety comes before speed. Don't run on stairs or in corridors, and stop any physical challenge if something hurts.</li>
+      <li>Don't disturb people at work, enter restricted areas, or get in the way of normal office activity.</li>
+      <li>If an instruction isn't clear, ask the invigilator before you start. Once the clock is running, their decision is final.</li>
+      <li>Faster completion breaks ties.</li>
+    </ul>
+  </section>
+  <footer>Challenge IDs match your assignment. To link to one challenge, add <code>#challenge-N</code> to this page's address, for example <code>#challenge-9</code>.</footer>
+</div>
+
+<script>
+const CATS = [
+  {
+    key: "hard", cls: "hard", level: "Hard", title: "Brain Games",
+    blurb: "Puzzles that test problem-solving, logic, deduction and quick thinking. You'll get 1–2 challenges from this category.",
+    rulesTitle: "Scoring",
+    rules: [
+      "A correct answer earns full points.",
+      "Faster completion breaks ties.",
+      "Crossword and Connections can earn partial points for partial completion, if the organisers use partial scoring.",
+    ],
+    tasks: [
+      { n: 1, name: "Pinpoint", place: "3rd Floor Lobby Area", time: "3–5 min",
+        sum: "Work out a hidden person, place, object or answer from clues that get more specific one by one.",
+        steps: [
+          "Go to the 3rd Floor Lobby Area and find the invigilator.",
+          "The invigilator reveals the first clue. It will be broad.",
+          "Each clue that follows narrows it down further.",
+          "When you're confident, say your answer to the invigilator.",
+        ],
+        rules: [
+          "Answer only once you're sure. Your answer counts as submitted when you say it.",
+          "Answering on an earlier, broader clue is faster, but riskier.",
+        ],
+        done: "You name the correct answer within the time limit." },
+      { n: 2, name: "Crossword", place: "1st Floor Lobby Area", time: "5–7 min",
+        sum: "Fill in a prepared crossword as fast as you can.",
+        steps: [
+          "Go to the 1st Floor Lobby Area and find the invigilator.",
+          "You get the crossword and are told which version you're playing: a set number of answers, or the full grid.",
+          "Solve the clues. They range from easy to difficult, so skip the hard ones and come back to them.",
+          "Hand it back when you reach the target, or when time runs out.",
+        ],
+        rules: [
+          "Crossing letters help. Use a word you're sure of to crack the ones next to it.",
+          "Partial completion may earn partial points.",
+        ],
+        done: "You complete the required number of answers, or the full crossword if that's your version." },
+      { n: 3, name: "Connections", place: "2nd Floor Lobby Area", time: "4–6 min",
+        sum: "Sort 16 words into 4 groups of 4 that share a hidden link.",
+        steps: [
+          "Go to the 2nd Floor Lobby Area and find the invigilator.",
+          "You receive 16 words.",
+          "Find four words that share a connection and put them forward as a group.",
+          "The invigilator tells you whether the group is right. Keep going until all four groups are found.",
+        ],
+        rules: [
+          "Mistakes are allowed, but both speed and accuracy count.",
+          "Watch for words that seem to fit more than one group. Each word belongs to exactly one.",
+        ],
+        done: "All 16 words are in 4 correct groups. Partial points may be given for the groups you find." },
+      { n: 15, name: "Docupath Riddle", place: "Bermuda Meeting Room, 2nd Floor", time: "4–6 min",
+        sum: "Solve a medium-complexity riddle about Docupath: its office, features, terminology or culture.",
+        steps: [
+          "Go to the Bermuda Meeting Room on the 2nd floor.",
+          "The invigilator reads or hands you the riddle.",
+          "Work through each line. Every line is a clue that points to the answer.",
+          "Tell the invigilator your answer.",
+        ],
+        rules: [
+          "The riddle tests reasoning, not memory. Expect wordplay and indirect hints rather than a straight fact.",
+          "Work it out yourself. Don't ask colleagues or look it up.",
+        ],
+        done: "You give the correct answer within the time limit." },
+    ],
+  },
+  {
+    key: "medium", cls: "medium", level: "Medium", title: "Memory, Observation & Logic",
+    blurb: "Challenges that test memory, attention to detail, logical thinking, and finding people around the office. You'll get 1–2 challenges from this category.",
+    rulesTitle: "Rules for this category",
+    rules: [
+      "No photos or notes during memory challenges unless the invigilator says otherwise.",
+      "In Remember This, the combination is shown only for the set memorising time.",
+      "In Human Transfer, you'll be given clear details about who to find, so there's no confusion over the person.",
+    ],
+    tasks: [
+      { n: 6, name: "Remember This", route: ["Members Lounge, Ground Floor", "3rd Floor"], time: "3–4 min",
+        sum: "Memorise a number-word combination, carry it to the 3rd floor in your head, and repeat it exactly.",
+        steps: [
+          "Go to the Members Lounge on the ground floor.",
+          "The invigilator shows you a number-word combination for a fixed amount of time.",
+          "Memorise it. Don't write it down or take a photo.",
+          "Go up to the 3rd floor and tell the invigilator there the exact combination.",
+        ],
+        rules: [
+          "No paper, phone notes, photos or help from anyone else.",
+          "The combination is hidden once the memorising time ends.",
+        ],
+        done: "You repeat the full combination to the 3rd-floor invigilator exactly, in the right order." },
+      { n: 7, name: "Spot and Remember", route: ["Think Tank, 4th Floor", "1st Floor"], time: "3–4 min",
+        sum: "Study a picture of 8 objects on the 4th floor, then name at least 6 of them from memory on the 1st floor.",
+        steps: [
+          "Go to the Think Tank on the 4th floor.",
+          "Study the image with 8 objects for the set time.",
+          "Go down to the 1st floor.",
+          "List the objects you remember to the invigilator there.",
+        ],
+        rules: [
+          "No photos or notes while you study the image.",
+          "A clear description counts if you can't remember the exact name.",
+        ],
+        done: "You correctly name or describe at least 6 of the 8 objects." },
+      { n: 14, name: "Human Transfer", place: "Different Floors", time: "3–5 min",
+        sum: "Find a specific person on another floor and bring them to the floor you're told.",
+        steps: [
+          "The invigilator gives you details that identify the person to find, and the floor to bring them to.",
+          "Go to the other floor and find them.",
+          "Explain the challenge and ask them to come with you.",
+          "Bring them to the required floor so the invigilator can check it's the right person.",
+        ],
+        rules: [
+          "Be polite. If the person is busy or in a meeting, don't interrupt. Tell the invigilator instead.",
+          "Walk, don't run, especially with someone else.",
+        ],
+        done: "The invigilator confirms you brought the correct person to the correct floor." },
+      { n: 18, name: "Knights and Knaves", place: "Loft Meeting Room, 3rd Floor", time: "Set by invigilator",
+        sum: "Use logic to work out whether Alice, Bob and Charlie are knights or knaves from what they say.",
+        steps: [
+          "Go to the Loft Meeting Room on the 3rd floor.",
+          "You're given statements made by Alice, Bob and Charlie.",
+          "Knights always tell the truth. Knaves always lie.",
+          "Work out which of the three are knights and which are knaves, then tell the invigilator.",
+        ],
+        rules: [
+          "Tip: assume one person is a knight, then check whether everyone's statements still make sense. If you hit a contradiction, they're a knave.",
+          "Work it out yourself. Don't ask anyone else.",
+        ],
+        done: "You correctly identify all three: Alice, Bob and Charlie." },
+    ],
+  },
+  {
+    key: "quick", cls: "easy", level: "Low", title: "Quick Challenges",
+    blurb: "Short challenges for speed, balance, creativity and a steady hand. You'll get 2–3 challenges from this category.",
+    rulesTitle: "Rules for this category",
+    rules: [
+      "Physical challenges put safety before speed.",
+      "In Steady Leg, the timer starts once you're properly balanced.",
+      "In Paper Craft, you won't get scissors, glue, pens or other materials unless the instructions say so.",
+    ],
+    tasks: [
+      { n: 4, name: "Quick Fitness", place: "Nearest Invigilator", time: "~1 min",
+        sum: "Complete a short physical challenge set by the invigilator.",
+        steps: [
+          "Go to the invigilator nearest you.",
+          "They tell you the exercise and how many to do, such as squats, jumping jacks or push-ups.",
+          "Do the full number with good form while the invigilator counts.",
+        ],
+        rules: [
+          "Safety before speed. Reps the invigilator doesn't count as proper form may not count.",
+          "If you have an injury or condition, tell the invigilator before you start.",
+        ],
+        done: "You finish every rep within about one minute." },
+      { n: 5, name: "Guess the Next Three", place: "Pacific Room, 2nd Floor", time: "1–2 min",
+        sum: "Spot the pattern in a number sequence and give the next three numbers.",
+        steps: [
+          "Go to the Pacific Room on the 2nd floor.",
+          "You're shown a sequence of numbers.",
+          "Work out the rule behind it.",
+          "Tell the invigilator the next 3 numbers.",
+        ],
+        rules: [
+          "Patterns can use adding, subtracting, multiplying, dividing, alternating steps or other simple logic.",
+          "Tip: check the gap between each pair of numbers first.",
+        ],
+        done: "All three numbers are correct and in the right order." },
+      { n: 13, name: "Steady Leg", place: "Nearest Invigilator", time: "~1 min",
+        sum: "Balance on one leg for 30 seconds.",
+        steps: [
+          "Go to the invigilator nearest you.",
+          "Stand on one leg, whichever you prefer.",
+          "Once you're properly balanced, the invigilator starts a 30-second timer. Hold until it ends.",
+        ],
+        rules: [
+          "Your raised foot must not touch the ground.",
+          "Don't lean on a wall, desk, person or anything else for support.",
+        ],
+        done: "You hold the balance for the full 30 seconds." },
+      { n: 16, name: "Paper Craft", place: "3rd Floor Lobby Area", time: "2–3 min",
+        sum: "Make anything you like from a single sheet of paper.",
+        steps: [
+          "Go to the 3rd Floor Lobby Area and find the invigilator.",
+          "You receive one sheet of paper.",
+          "Fold, roll, tear or shape it into whatever you can make in the time.",
+          "Show your creation to the invigilator.",
+        ],
+        rules: [
+          "One sheet only. No scissors, glue, pens or other materials unless the instructions say so.",
+          "Any idea is allowed: a plane, a boat, an animal, a hat.",
+        ],
+        done: "You show a finished creation to the invigilator before time runs out." },
+      { n: 17, name: "Cup Tower", place: "Tree House, 1st Floor", time: "Set by invigilator",
+        sum: "Stack cups into a tower that's 3 layers high.",
+        steps: [
+          "Go to the Tree House on the 1st floor.",
+          "Take the cups provided by the invigilator.",
+          "Build a tower with 3 layers, usually a pyramid with the widest row at the bottom.",
+          "Step back and let the invigilator check it.",
+        ],
+        rules: [
+          "Use only the cups provided.",
+          "If the tower falls, rebuild it. The clock keeps running.",
+        ],
+        done: "Your 3-layer tower is standing on its own when the invigilator checks it." },
+    ],
+  },
+  {
+    key: "location", cls: "loc", level: "Low", title: "Selfie Scavenger Hunt",
+    blurb: "Go to a place in the office, take a selfie as instructed, and show the photo to the invigilator. You'll get 2–3 challenges from this category.",
+    rulesTitle: "Rules for every selfie challenge",
+    rules: [
+      "Take the selfie at the location itself. Don't recreate it somewhere else later.",
+      "You must appear in the photo.",
+      "The landmark or location must be clearly visible.",
+      "Don't disturb people, enter restricted areas, or get in the way of normal work.",
+      "If several people are doing the same location, you may get a specific pose or detail to include so each photo can be told apart.",
+    ],
+    tasks: [
+      { n: 8, name: "Top Floor Selfie", place: "Topmost Staircase, 5th Floor", time: "3–5 min",
+        sum: "Climb to the topmost staircase on the 5th floor and take a selfie as instructed.",
+        steps: [
+          "Check with the invigilator how to take the selfie.",
+          "Go to the topmost staircase on the 5th floor.",
+          "Take the selfie as instructed.",
+          "Come back and show the photo to the invigilator.",
+        ],
+        rules: ["Take the stairs carefully. No running, and keep a hand on the rail."],
+        done: "The photo clearly shows you and the topmost staircase." },
+      { n: 9, name: "Elon Musk Selfie", place: "Members Lounge, Ground Floor", time: "4–6 min",
+        sum: "Take a selfie in the Members Lounge under the photo of Elon Musk.",
+        steps: [
+          "Go to the Members Lounge on the ground floor.",
+          "Find the photo of Elon Musk.",
+          "Take a selfie standing under it.",
+          "Come back and show the photo to the invigilator.",
+        ],
+        rules: ["Keep noise down. Other people may be using the lounge."],
+        done: "The photo clearly shows you and the Elon Musk photo in the lounge." },
+      { n: 10, name: "Vending Machine Selfie", place: "Vending Machine, Ground Floor", time: "2–4 min",
+        sum: "Find the vending machine on the ground floor and take a selfie with it.",
+        steps: [
+          "Check with the invigilator how to take the selfie.",
+          "Go to the vending machine on the ground floor.",
+          "Take the selfie as instructed.",
+          "Come back and show the photo to the invigilator.",
+        ],
+        rules: ["You don't need to buy anything."],
+        done: "The photo clearly shows you and the vending machine." },
+      { n: 11, name: "Cubicle Selfie", place: "2nd Floor Cubicle", time: "2–4 min",
+        sum: "Find a cubicle on the 2nd floor, sit in it, and take a selfie.",
+        steps: [
+          "Check with the invigilator how to take the selfie.",
+          "Go to the 2nd floor and find a cubicle.",
+          "Sit in it and take the selfie as instructed.",
+          "Come back and show the photo to the invigilator.",
+        ],
+        rules: [
+          "Choose an empty cubicle. Don't ask someone to give up their seat.",
+          "Don't touch or move anything on the desk.",
+        ],
+        done: "The photo clearly shows you sitting in a 2nd-floor cubicle." },
+      { n: 12, name: "Tree House Selfie", place: "Tree House", time: "3–5 min",
+        sum: "Go to the Tree House and take a selfie as instructed.",
+        steps: [
+          "Check with the invigilator how to take the selfie.",
+          "Go to the Tree House.",
+          "Take the selfie as instructed.",
+          "Come back and show the photo to the invigilator.",
+        ],
+        rules: ["Keep noise down if people are using the space."],
+        done: "The photo clearly shows you and the Tree House." },
+    ],
+  },
+];
+
+const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const placeText = (t) => (t.route ? t.route.join(" → ") : t.place);
+const placeHtml = (t) => t.route
+  ? `<span class="route"><span>${esc(t.route[0])}</span><span class="arrow">then go to</span><span>${esc(t.route[1])}</span></span>`
+  : esc(t.place);
+
+document.getElementById("catalogue").innerHTML = CATS.map((c) => `
+  <section class="cat ${c.cls}" id="${c.key}" data-cat="${c.key}" aria-labelledby="h-${c.key}">
+    <div class="cat-head">
+      <span class="lvl">${c.level}</span>
+      <h2 id="h-${c.key}">${esc(c.title)}</h2>
+      <p>${esc(c.blurb)}</p>
+    </div>
+    <div class="cat-rules">
+      <h3>${esc(c.rulesTitle)}</h3>
+      <ul>${c.rules.map((r) => `<li>${esc(r)}</li>`).join("")}</ul>
+    </div>
+    <div class="cards">
+      ${c.tasks.map((t) => `
+      <article class="card" id="challenge-${t.n}" aria-labelledby="t-${t.n}">
+        <div class="card-top">
+          <div class="num" aria-label="Challenge ${t.n}">${t.n}</div>
+          <div>
+            <h3 id="t-${t.n}">${esc(t.name)} <span class="pill">${c.level}</span></h3>
+            <p class="sum">${esc(t.sum)}</p>
+          </div>
+        </div>
+        <dl class="meta">
+          <div class="where"><dt>Where</dt><dd>${placeHtml(t)}</dd></div>
+          <div class="time"><dt>Time</dt><dd>${esc(t.time)}</dd></div>
+        </dl>
+        <div class="block"><h4>How it works</h4><ol>${t.steps.map((s) => `<li>${esc(s)}</li>`).join("")}</ol></div>
+        <div class="block"><h4>Rules &amp; tips</h4><ul>${t.rules.map((s) => `<li>${esc(s)}</li>`).join("")}</ul></div>
+        <div class="block done"><h4>To complete</h4><p>${esc(t.done)}</p></div>
+        <div class="card-foot"><span>${esc(c.title)}</span><button class="copy" type="button" data-n="${t.n}">Copy link</button></div>
+      </article>`).join("")}
+    </div>
+  </section>`).join("");
+
+/* at-a-glance list, in ID order */
+const all = CATS.flatMap((c) => c.tasks.map((t) => ({ ...t, c })));
+all.sort((a, b) => a.n - b.n);
+document.getElementById("glist").innerHTML = all.map((t) => `
+  <li class="${t.c.cls}"><a href="#challenge-${t.n}">
+    <span class="gid">${t.n}</span>
+    <span><span class="gname">${esc(t.name)}</span><span class="gplace">${esc(placeText(t))}</span></span>
+    <span class="pill">${t.c.level}</span>
+  </a></li>`).join("");
+
+/* filters */
+const chips = document.querySelectorAll(".chip");
+function setFilter(f) {
+  chips.forEach((b) => b.setAttribute("aria-pressed", b.dataset.f === f));
+  document.querySelectorAll(".cat").forEach((s) => { s.hidden = f !== "all" && s.dataset.cat !== f; });
+}
+chips.forEach((b) => b.addEventListener("click", () => {
+  setFilter(b.dataset.f);
+  const sec = b.dataset.f === "all" ? null : document.getElementById(b.dataset.f);
+  if (sec) sec.scrollIntoView({ block: "start" });
+}));
+
+/* jump to a challenge */
+const MAX = all.length;
+function show(n, smooth) {
+  const el = document.getElementById("challenge-" + n);
+  if (!el) return false;
+  setFilter("all");
+  el.scrollIntoView({ behavior: smooth && !matchMedia("(prefers-reduced-motion: reduce)").matches ? "smooth" : "auto", block: "start" });
+  el.classList.add("flash");
+  setTimeout(() => el.classList.remove("flash"), 1800);
+  return true;
+}
+document.getElementById("jump").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const input = document.getElementById("jumpNum");
+  const n = parseInt(input.value, 10);
+  const msg = document.getElementById("jumpMsg");
+  if (show(n, true)) { msg.textContent = ""; input.blur(); history.replaceState(null, "", "#challenge-" + n); }
+  else msg.textContent = `Enter a number from 1 to ${MAX}.`;
+});
+function fromHash() { const m = location.hash.match(/^#challenge-(\d+)$/); if (m) show(m[1], false); }
+window.addEventListener("hashchange", fromHash);
+fromHash();
+
+/* copy link */
+document.addEventListener("click", (e) => {
+  const b = e.target.closest(".copy");
+  if (!b) return;
+  const url = location.href.split("#")[0] + "#challenge-" + b.dataset.n;
+  const done = () => { b.textContent = "Copied"; setTimeout(() => (b.textContent = "Copy link"), 1500); };
+  if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(url).then(done, () => { b.textContent = url; });
+  else b.textContent = url;
+});
+</script>
+</body>
+</html>
